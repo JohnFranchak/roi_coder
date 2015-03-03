@@ -61,9 +61,10 @@ guidata(hObject, handles);
 % UIWAIT makes ROI wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
-global frame, global folder_name, global data, global advance, global dragging, global orPos;
+global frame, global folder_name, global data, global advance, global dragging, global orPos, global nudge;
 dragging = [];
 folder_name = 0;
+nudge = 1;
 
 % --- Outputs from this function are returned to the command line.
 function varargout = ROI_OutputFcn(hObject, eventdata, handles) 
@@ -176,13 +177,13 @@ if data(5,frame) == 1
     setFrame(frame, handles);
 end
 
-function resizeROI(sizediff, handles)
+function resizeROI(xsizediff, ysizediff, handles)
 global frame, global folder_name, global data, global advance, global dragging, global orPos;
 if data(5,frame) == 1
-    data(1,frame) = data(1,frame) - sizediff;
-    data(2,frame) = data(2,frame) + sizediff;
-    data(3,frame) = data(3,frame) + sizediff;
-    data(4,frame) = data(4,frame) - sizediff;
+    data(1,frame) = data(1,frame) - xsizediff;
+    data(2,frame) = data(2,frame) + ysizediff;
+    data(3,frame) = data(3,frame) + xsizediff;
+    data(4,frame) = data(4,frame) - ysizediff;
     setFrame(frame, handles);
 end
     
@@ -208,32 +209,41 @@ ReleaseFocusFromUI(hObject);
 
 % --- Executes on button press in record.
 function record_Callback(hObject, eventdata, handles)
-global frame, global folder_name, global data, global advance, global dragging, global orPos;
+global frame, global folder_name, global data, global advance, global dragging, global orPos, global file_path;
 if folder_name ~= 0
     [x, y] = getPoints;
     data(:,frame) = [min(x) max(y) max(x) min(y) 1];
     displayROI(handles);
 end
+if get(handles.autosave, 'Value') == 1
+    csvwrite(file_path,data');
+end
     ReleaseFocusFromUI(hObject);
 
 % --- Executes on button press in clearROI.
 function clearROI_Callback(hObject, eventdata, handles)
-global frame, global folder_name, global data, global advance, global dragging, global orPos;
+global frame, global folder_name, global data, global advance, global dragging, global orPos, global file_path;
 if folder_name ~= 0
     data(:,frame) = [0 0 0 0 0];
     setFrame(frame, handles);
+end
+if get(handles.autosave, 'Value') == 1
+    csvwrite(file_path,data');
 end
 ReleaseFocusFromUI(hObject);
 
 % --- Executes on button press in copy.
 function copy_Callback(hObject, eventdata, handles)
-global frame, global folder_name, global data, global advance, global dragging, global orPos;
+global frame, global folder_name, global data, global advance, global dragging, global orPos, global file_path;
 if folder_name ~= 0
     if frame + 1 < length(data) 
           data(:, frame + 1) = data(:, frame);
           next_Callback(handles.next, [], handles)
     end
-end    
+end
+if get(handles.autosave, 'Value') == 1
+    csvwrite(file_path,data');
+end
     ReleaseFocusFromUI(hObject);
 
 function setFrame(newframe, handles)
@@ -247,9 +257,6 @@ imshow(image);
 if data(5,frame) == 1
     displayROI(handles)
 end
-if get(handles.autosave, 'Value') == 1
-    csvwrite(file_path,data');
-end
 drawnow;
 
 function displayROI(handles)
@@ -260,7 +267,7 @@ imshow(image);
 hold on
 c = data(1:4, frame);
 plot(c(1),c(2),c(3),c(4));
-a = annotation('Rectangle','ButtonDownFcn',@dragObject,'Color','y','LineWidth',2);
+a = annotation('Rectangle','ButtonDownFcn',@dragObject,'Color','y','LineWidth',1);
 set(a,'Parent',gca);
 set(a,'Position',[min(c(1),c(3)) min(c(2),c(4)) abs(c(1)-c(3)) abs(c(2)-c(4))]);
 hold off
@@ -303,9 +310,9 @@ end
 
 % --- Executes on key press with focus on figure1 and none of its controls.
 function figure1_KeyPressFcn(hObject, eventdata, handles)
-global frame, global folder_name, global data, global advance, global dragging, global orPos;
+global frame, global folder_name, global data, global advance, global dragging, global orPos, global nudge;
 if folder_name ~= 0
-    keyPressed = eventdata.Key;     
+    keyPressed = eventdata.Key;    
     if strcmpi(keyPressed,'d')
       next_Callback(handles.next, [], handles)
     elseif strcmpi(keyPressed,'a')
@@ -331,19 +338,35 @@ if folder_name ~= 0
     elseif strcmpi(keyPressed, 'e')
         copy_Callback(handles.copy, [], handles);
     elseif strcmpi(keyPressed, 'leftarrow')
-      nudgeROI(-1,0,handles);
+      nudgeROI(-nudge,0,handles);
     elseif strcmpi(keyPressed, 'rightarrow')
-      nudgeROI(1,0,handles);
+      nudgeROI(nudge,0,handles);
     elseif strcmpi(keyPressed, 'uparrow')
-      nudgeROI(0,-1,handles);
+      nudgeROI(0,-nudge,handles);
     elseif strcmpi(keyPressed, 'downarrow')
-      nudgeROI(0,1,handles);
+      nudgeROI(0,nudge,handles);
     elseif strcmpi(keyPressed, 'downarrow')
-      nudgeROI(0,1,handles);
+      nudgeROI(0,nudge,handles);
     elseif strcmpi(keyPressed, 'delete')
-      resizeROI(-1,handles);
+      resizeROI(-nudge,-nudge,handles);
     elseif strcmpi(keyPressed, 'end')
-      resizeROI(1,handles);  
+      resizeROI(nudge,nudge,handles);
+    elseif strcmpi(keyPressed, 'numpad8')
+      resizeROI(0,nudge,handles);    
+    elseif strcmpi(keyPressed, 'numpad2')
+      resizeROI(0,-nudge,handles);  
+    elseif strcmpi(keyPressed, 'numpad4')
+      resizeROI(-nudge,0,handles);  
+    elseif strcmpi(keyPressed, 'numpad6')
+      resizeROI(nudge,0,handles);  
+    elseif strcmpi(keyPressed, 'pageup')
+      if nudge < 4
+        nudge = nudge + 1;
+      end
+    elseif strcmpi(keyPressed, 'pagedown')
+      if nudge > 1
+          nudge = nudge - 1;
+      end
     end
 end      
           
