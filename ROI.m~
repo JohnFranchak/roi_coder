@@ -22,7 +22,7 @@ function varargout = ROI(varargin)
 
 % Edit the above text to modify the response to help ROI
 
-% Last Modified by GUIDE v2.5 06-Mar-2015 17:11:54
+% Last Modified by GUIDE v2.5 06-Mar-2015 17:07:58
 
 
 % Begin initialization code - DO NOT EDIT
@@ -360,7 +360,7 @@ if folder_name ~= 0
     elseif strcmpi(keyPressed, 'numpad6')
       resizeROI(nudge,0,handles);  
     elseif strcmpi(keyPressed, 'pageup')
-      if nudge < 10
+      if nudge < 4
         nudge = nudge + 1;
         set (handles.stepsize, 'string',strcat(num2str(nudge), ' pixels'));
         drawnow;
@@ -368,8 +368,6 @@ if folder_name ~= 0
     elseif strcmpi(keyPressed, 'pagedown')
       if nudge > 1
           nudge = nudge - 1;
-          set (handles.stepsize, 'string',strcat(num2str(nudge), ' pixels'));
-          drawnow;
       end
     end
 end      
@@ -410,3 +408,5 @@ function openhelp_Callback(hObject, eventdata, handles)
 figure;
 imshow('splash.jpg'); 
 ReleaseFocusFromUI(hObject);
+
+
