@@ -22,7 +22,7 @@ function varargout = ROI(varargin)
 
 % Edit the above text to modify the response to help ROI
 
-% Last Modified by GUIDE v2.5 06-Mar-2015 17:11:54
+% Last Modified by GUIDE v2.5 06-Mar-2015 17:46:59
 
 
 % Begin initialization code - DO NOT EDIT
@@ -61,7 +61,7 @@ guidata(hObject, handles);
 % UIWAIT makes ROI wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
-global frame, global folder_name, global data, global advance, global dragging, global orPos, global nudge;
+global frame, global folder_name, global data, global advance, global dragging, global orPos, global nudge, global coded;
 dragging = [];
 folder_name = 0;
 nudge = 1;
@@ -75,7 +75,7 @@ varargout{1} = handles.output;
 
 % --- Executes on button press in loaddata.
 function loaddata_Callback(hObject, eventdata, handles) %#ok<*DEFNU>
-global frame, global folder_name, global data, global advance, global dragging, global orPos, global file_path;
+global frame, global folder_name, global data, global advance, global dragging, global orPos, global file_path, global coded;
 
 %Set all UI controls to default values (axes, display boxes, etc)
 %Allow for a cancel option where this is all bypassed
@@ -89,7 +89,9 @@ if folder_name ~= 0
     set(handles.frameslider, 'max', length(files));
     set(handles.frameslider, 'min', 1);
     set(handles.frameslider, 'SliderStep', [30/length(files) , 150/length(files)]); 
-
+    coded = 1:length(files);
+    
+    
     coding_files = dir(fullfile(folder_name, '*.csv'));
     file_path = [];
 
@@ -247,7 +249,7 @@ end
     ReleaseFocusFromUI(hObject);
 
 function setFrame(newframe, handles)
-global frame, global folder_name, global data, global advance, global dragging, global orPos, global file_path;
+global frame, global folder_name, global data, global advance, global dragging, global orPos, global file_path, global coded;
 frame = newframe;
 set (handles.framenum, 'string',num2str(frame));
 set(handles.frameslider,'Value',frame)
@@ -257,6 +259,15 @@ imshow(image);
 if data(5,frame) == 1
     displayROI(handles)
 end
+axes(handles.progress)
+prog = coded .* data(5,:);
+hist(prog(prog ~= 0),500);
+axis([0 length(coded) 0 1]);
+set(gca, 'YTick', []);
+set(gca, 'XTick', []);
+hold on
+plot([frame frame], [0 1], 'r', 'LineWidth',2);
+hold off
 drawnow;
 
 function displayROI(handles)
@@ -401,7 +412,7 @@ drawnow;
 
 % --- Executes during object creation, after setting all properties.
 function stepsize_CreateFcn(hObject, eventdata, handles)
-handles.filename=hObject;
+handles.stepsize=hObject;
 set (hObject, 'string','1 pixel');
 drawnow;
 
@@ -410,3 +421,10 @@ function openhelp_Callback(hObject, eventdata, handles)
 figure;
 imshow('splash.jpg'); 
 ReleaseFocusFromUI(hObject);
+
+
+% --- Executes during object creation, after setting all properties.
+function progress_CreateFcn(hObject, eventdata, handles)
+handles.progress=hObject; % tag for this axis, which I call axesX in this example
+axes(hObject); hist([]);
+guidata(hObject, handles); % update the handles structure for the gui
