@@ -52,6 +52,8 @@ function ROI_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to ROI (see VARARGIN)
 
+addpath('util');
+
 % Choose default command line output for ROI
 handles.output = hObject;
 
@@ -85,45 +87,53 @@ folder_name = uigetdir;
 if folder_name ~= 0
     filestruct = dir(fullfile(folder_name, '*.JPG'));
     files = sort_nat({filestruct.name});
-    frame = 1;
-    coded = 1:length(files);
-        
-    set(handles.frameslider, 'value', 1);
-    set(handles.frameslider, 'max', length(files));
-    set(handles.frameslider, 'min', 1);
-    if length(files) > 30
-        set(handles.frameslider, 'SliderStep', [30/length(files) , 150/length(files)]); 
-    end
     
-    %Find existing coding files in directory
-    coding_files = dir(fullfile(folder_name, '*.csv'));
-    file_path = [];
+    if ~isempty(files)
+        frame = 1;
+        coded = 1:length(files);
 
-    if ~isempty(coding_files) 
-        choice = questdlg('Coding files exist for this video. Load existing data?', 'Data files found', 'Yes', 'No', 'Yes');
-        if strcmp(choice, 'Yes')
-            [file_name, folder_name] = uigetfile({'*.csv', 'CSV files only'}, 'Choose an output file', folder_name);
-            file_path = strcat(folder_name, file_name);
-            set (handles.filename, 'string',num2str(file_name));
-            set (handles.autosave, 'Enable', 'on');
-            data = csvread(file_path)';
+        set(handles.frameslider, 'value', 1);
+        set(handles.frameslider, 'max', length(files));
+        set(handles.frameslider, 'min', 1);
+        if length(files) > 30
+            set(handles.frameslider, 'SliderStep', [30/length(files) , 150/length(files)]); 
+        end
+
+        %Find existing coding files in directory
+        coding_files = dir(fullfile(folder_name, '*.csv'));
+        file_path = [];
+        abort = 0;
+
+        if ~isempty(coding_files) 
+            choice = questdlg('Coding files exist for this video. Load existing data?', 'Data files found', 'Yes', 'No', 'Yes');
+            if strcmp(choice, 'Yes')
+                [file_name, folder_name] = uigetfile({'*.csv', 'CSV files only'}, 'Choose an output file', folder_name);
+                file_path = strcat(folder_name, file_name);
+                set (handles.filename, 'string',num2str(file_name));
+                set (handles.autosave, 'Enable', 'on');
+                data = csvread(file_path)';
+                if length(data) ~= length(files)
+                    msgbox('Image frames do not match coding file! Exit program, reopen, and save to a new output file.');
+                    abort = 1;
+                end
+            else
+                data = zeros(6, length(files));
+            end
         else
             data = zeros(6, length(files));
         end
-    else
-        data = zeros(6, length(files));
-    end
 
-    %Write frame numbers to datafile
-    for i = 1:length(files)
-        substrs = strsplit(files{i},{'_','.'},'CollapseDelimiters',true);
-        data(6,i) = str2double(substrs{end-1}); %#ok<AGROW,NASGU>
+        %Write frame numbers to datafile
+        if ~abort
+            substrs = cellfun(@split_file,files,'UniformOutput',false);
+            fnums = cellfun(@get_frame,substrs,'UniformOutput',false);
+            data(6,:) = cell2mat(fnums);
+
+            setFrame(frame, handles);
+            dragging = [];
+            orPos = [];
+        end
     end
-     
-    
-    setFrame(frame, handles);
-    dragging = [];
-    orPos = [];
 end
 ReleaseFocusFromUI(hObject);
 
@@ -262,9 +272,8 @@ end
 function setFrame(newframe, handles)
 global frame, global folder_name, global data, global advance, global dragging, global orPos, global file_path, global coded, global files;
 frame = newframe;
-set (handles.framenum, 'string',num2str(frame));
+set (handles.framenum, 'string',num2str(data(6,frame)));
 set(handles.frameslider,'Value',frame)
-%image = imread(strcat(folder_name,'/',num2str(frame)),'JPG'); %REPLACE WITH NEW FILE LIST
 image = imread(get_file_name(),'JPG');
 axes(handles.ax1);
 imshow(image);
@@ -284,7 +293,6 @@ drawnow;
 
 function displayROI(handles)
 global frame, global folder_name, global data, global advance, global dragging, global orPos, global files;
-%image = imread(strcat(folder_name,'/',num2str(frame)),'JPG'); %REPLACE WITH NEW FILE LIST
 image = imread(get_file_name(),'JPG');
 axes(handles.ax1);
 imshow(image);

@@ -1,2 +1,3 @@
 clear all
-ROI;
+addpath('util');
+ROI
