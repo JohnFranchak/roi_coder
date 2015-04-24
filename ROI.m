@@ -108,12 +108,19 @@ if folder_name ~= 0
             set (handles.autosave, 'Enable', 'on');
             data = csvread(file_path)';
         else
-            data = zeros(5, length(files));
+            data = zeros(6, length(files));
         end
     else
-        data = zeros(5, length(files));
+        data = zeros(6, length(files));
     end
 
+    %Write frame numbers to datafile
+    for i = 1:length(files)
+        substrs = strsplit(files{i},{'_','.'},'CollapseDelimiters',true);
+        data(6,i) = str2double(substrs{end-1}); %#ok<AGROW,NASGU>
+    end
+     
+    
     setFrame(frame, handles);
     dragging = [];
     orPos = [];
@@ -169,7 +176,7 @@ global frame, global folder_name, global data, global advance, global dragging, 
         ydiff = newPos(1,2) - orPos(1,2);
         set(dragging,'Position',get(dragging,'Position') + [xdiff ydiff 0 0]);
         c = get(dragging,'Position');
-        data(: , frame) = [c(1) c(2)+c(4) c(1)+c(3) c(2) 1];
+        data(1:5 , frame) = [c(1) c(2)+c(4) c(1)+c(3) c(2) 1];
         dragging = [];
     end
       
@@ -218,7 +225,7 @@ function record_Callback(hObject, eventdata, handles)
 global frame, global folder_name, global data, global advance, global dragging, global orPos, global file_path;
 if folder_name ~= 0
     [x, y] = getPoints;
-    data(:,frame) = [min(x) max(y) max(x) min(y) 1];
+    data(1:5,frame) = [min(x) max(y) max(x) min(y) 1];
     displayROI(handles);
 end
 if get(handles.autosave, 'Value') == 1
@@ -230,7 +237,7 @@ end
 function clearROI_Callback(hObject, eventdata, handles)
 global frame, global folder_name, global data, global advance, global dragging, global orPos, global file_path;
 if folder_name ~= 0
-    data(:,frame) = [0 0 0 0 0];
+    data(1:5,frame) = [0 0 0 0 0];
     setFrame(frame, handles);
 end
 if get(handles.autosave, 'Value') == 1
@@ -243,7 +250,7 @@ function copy_Callback(hObject, eventdata, handles)
 global frame, global folder_name, global data, global advance, global dragging, global orPos, global file_path;
 if folder_name ~= 0
     if frame + 1 < length(data) 
-          data(:, frame + 1) = data(:, frame);
+          data(1:5, frame + 1) = data(1:5, frame);
           next_Callback(handles.next, [], handles)
     end
 end
