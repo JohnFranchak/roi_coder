@@ -75,7 +75,7 @@ varargout{1} = handles.output;
 
 % --- Executes on button press in loaddata.
 function loaddata_Callback(hObject, eventdata, handles) %#ok<*DEFNU>
-global frame, global folder_name, global data, global advance, global dragging, global orPos, global file_path, global coded;
+global frame, global folder_name, global data, global advance, global dragging, global orPos, global file_path, global coded, global files;
 
 %Set all UI controls to default values (axes, display boxes, etc)
 %Allow for a cancel option where this is all bypassed
@@ -83,15 +83,19 @@ global frame, global folder_name, global data, global advance, global dragging, 
 folder_name = uigetdir;
 
 if folder_name ~= 0
-    files = dir(fullfile(folder_name, '*.JPG'));
+    filestruct = dir(fullfile(folder_name, '*.JPG'));
+    files = sort_nat({filestruct.name});
     frame = 1;
+    coded = 1:length(files);
+        
     set(handles.frameslider, 'value', 1);
     set(handles.frameslider, 'max', length(files));
     set(handles.frameslider, 'min', 1);
-    set(handles.frameslider, 'SliderStep', [30/length(files) , 150/length(files)]); 
-    coded = 1:length(files);
+    if length(files) > 30
+        set(handles.frameslider, 'SliderStep', [30/length(files) , 150/length(files)]); 
+    end
     
-    
+    %Find existing coding files in directory
     coding_files = dir(fullfile(folder_name, '*.csv'));
     file_path = [];
 
@@ -249,11 +253,12 @@ end
     ReleaseFocusFromUI(hObject);
 
 function setFrame(newframe, handles)
-global frame, global folder_name, global data, global advance, global dragging, global orPos, global file_path, global coded;
+global frame, global folder_name, global data, global advance, global dragging, global orPos, global file_path, global coded, global files;
 frame = newframe;
 set (handles.framenum, 'string',num2str(frame));
 set(handles.frameslider,'Value',frame)
-image = imread(strcat(folder_name,'/',num2str(frame)),'JPG');
+%image = imread(strcat(folder_name,'/',num2str(frame)),'JPG'); %REPLACE WITH NEW FILE LIST
+image = imread(get_file_name(),'JPG');
 axes(handles.ax1);
 imshow(image);
 if data(5,frame) == 1
@@ -271,8 +276,9 @@ hold off
 drawnow;
 
 function displayROI(handles)
-global frame, global folder_name, global data, global advance, global dragging, global orPos;
-image = imread(strcat(folder_name,'/',num2str(frame)),'JPG');
+global frame, global folder_name, global data, global advance, global dragging, global orPos, global files;
+%image = imread(strcat(folder_name,'/',num2str(frame)),'JPG'); %REPLACE WITH NEW FILE LIST
+image = imread(get_file_name(),'JPG');
 axes(handles.ax1);
 imshow(image);
 hold on
@@ -384,8 +390,12 @@ if folder_name ~= 0
       end
     end
 end      
-          
-        
+
+function filename = get_file_name()
+global files, global folder_name, global frame;
+filename = strcat(folder_name,'/',char(files{frame}));
+
+
 function ReleaseFocusFromUI(uiObj)
           set(uiObj, 'Enable', 'off');
           drawnow update;
@@ -421,7 +431,6 @@ function openhelp_Callback(hObject, eventdata, handles)
 figure;
 imshow('splash.jpg'); 
 ReleaseFocusFromUI(hObject);
-
 
 % --- Executes during object creation, after setting all properties.
 function progress_CreateFcn(hObject, eventdata, handles)
