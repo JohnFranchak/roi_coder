@@ -312,7 +312,7 @@ end
 if get(handles.face_detection, 'Value') == 1
     detected_roi = step(detector, image);
     if ~isempty(detected_roi)
-        for i = 1:length(detected_roi)
+        for i = 1:size(detected_roi,1)
             if data(5, frame) == 1
                 if get(a, 'Position') ~= detected_roi(i,:)
                     b(i) = annotation('Rectangle','ButtonDownFcn',@selectROI, 'Color','g','LineWidth',1);
@@ -337,7 +337,6 @@ global data, global frame,
 c = get(hObject,'Position');
 set(hObject, 'Color', 'r');
 data(1:5 , frame) = [c(1) c(2)+c(4) c(1)+c(3) c(2) 1];
-setFrame(frame);
         
 function [x,y] = getPoints
 [x,y] = ginput(2);
@@ -488,3 +487,6 @@ guidata(hObject, handles); % update the handles structure for the gui
 
 % --- Executes during object creation, after setting all properties.
 function face_detection_CreateFcn(hObject, eventdata, handles)
+
+function face_detection_Callback(hObject, eventdata, handles)
+ReleaseFocusFromUI(hObject);
