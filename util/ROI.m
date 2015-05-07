@@ -22,7 +22,7 @@ function varargout = ROI(varargin)
 
 % Edit the above text to modify the response to help ROI
 
-% Last Modified by GUIDE v2.5 06-Mar-2015 17:46:59
+% Last Modified by GUIDE v2.5 06-May-2015 17:38:57
 
 
 % Begin initialization code - DO NOT EDIT
@@ -63,10 +63,12 @@ guidata(hObject, handles);
 % UIWAIT makes ROI wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
-global frame, global folder_name, global data, global advance, global dragging, global orPos, global nudge, global coded;
+
+global detector, global frame, global folder_name, global data, global advance, global dragging, global orPos, global nudge, global coded;
 dragging = [];
 folder_name = 0;
 nudge = 1;
+detector = vision.CascadeObjectDetector;
 
 % --- Outputs from this function are returned to the command line.
 function varargout = ROI_OutputFcn(hObject, eventdata, handles) 
@@ -270,16 +272,18 @@ end
     ReleaseFocusFromUI(hObject);
 
 function setFrame(newframe, handles)
-global frame, global folder_name, global data, global advance, global dragging, global orPos, global file_path, global coded, global files;
+global frame, global image, global folder_name, global data, global advance, global dragging, global orPos, global file_path, global coded, global files;
 frame = newframe;
 set (handles.framenum, 'string',num2str(data(6,frame)));
 set(handles.frameslider,'Value',frame)
 image = imread(get_file_name(),'JPG');
 axes(handles.ax1);
 imshow(image);
-if data(5,frame) == 1
+if data(5,frame) == 1 || get(handles.face_detection, 'Value') == 1
     displayROI(handles)
 end
+
+%Update Progress Bar
 axes(handles.progress)
 prog = coded .* data(5,:);
 hist(prog(prog ~= 0),500);
@@ -292,19 +296,49 @@ hold off
 drawnow;
 
 function displayROI(handles)
-global frame, global folder_name, global data, global advance, global dragging, global orPos, global files;
+global image, global detector, global detected_roi, global frame, global folder_name, global data, global advance, global dragging, global orPos, global files;
 image = imread(get_file_name(),'JPG');
 axes(handles.ax1);
 imshow(image);
+
 hold on
-c = data(1:4, frame);
-plot(c(1),c(2),c(3),c(4));
-a = annotation('Rectangle','ButtonDownFcn',@dragObject,'Color','y','LineWidth',1);
-set(a,'Parent',gca);
-set(a,'Position',[min(c(1),c(3)) min(c(2),c(4)) abs(c(1)-c(3)) abs(c(2)-c(4))]);
+if data(5,frame) == 1
+    c = data(1:4, frame);
+    plot(c(1),c(2),c(3),c(4));
+    a = annotation('Rectangle','ButtonDownFcn',@dragObject,'Color','y','LineWidth',1);
+    set(a,'Parent',gca);
+    set(a,'Position',[min(c(1),c(3)) min(c(2),c(4)) abs(c(1)-c(3)) abs(c(2)-c(4))]);
+end
+if get(handles.face_detection, 'Value') == 1
+    detected_roi = step(detector, image);
+    if ~isempty(detected_roi)
+        for i = 1:length(detected_roi)
+            if data(5, frame) == 1
+                if get(a, 'Position') ~= detected_roi(i,:)
+                    b(i) = annotation('Rectangle','ButtonDownFcn',@selectROI, 'Color','g','LineWidth',1);
+                    set(b(i),'Parent',gca);
+                    set(b(i),'Position',detected_roi(i,:));
+                end
+            else
+                b(i) = annotation('Rectangle','ButtonDownFcn',@selectROI, 'Color','g','LineWidth',1);
+                set(b(i),'Parent',gca);
+                set(b(i),'Position',detected_roi(i,:));
+            end
+        end
+    end
+end
+
+
 hold off
 drawnow update;
 
+function selectROI(hObject,eventdata)
+global data, global frame, 
+c = get(hObject,'Position');
+set(hObject, 'Color', 'r');
+data(1:5 , frame) = [c(1) c(2)+c(4) c(1)+c(3) c(2) 1];
+setFrame(frame);
+        
 function [x,y] = getPoints
 [x,y] = ginput(2);
 
@@ -313,7 +347,7 @@ global frame, global folder_name, global data, global advance, global dragging, 
 if folder_name ~= 0
     while advance == 1 && frame < length(data)
         setFrame(frame + 1, handles);
-        pause(.02);
+        pause(.01);
     end
 end
 
@@ -410,7 +444,6 @@ function filename = get_file_name()
 global files, global folder_name, global frame;
 filename = strcat(folder_name,'/',char(files{frame}));
 
-
 function ReleaseFocusFromUI(uiObj)
           set(uiObj, 'Enable', 'off');
           drawnow update;
@@ -452,3 +485,6 @@ function progress_CreateFcn(hObject, eventdata, handles)
 handles.progress=hObject; % tag for this axis, which I call axesX in this example
 axes(hObject); hist([]);
 guidata(hObject, handles); % update the handles structure for the gui
+
+% --- Executes during object creation, after setting all properties.
+function face_detection_CreateFcn(hObject, eventdata, handles)
