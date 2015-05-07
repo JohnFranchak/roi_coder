@@ -386,6 +386,8 @@ if folder_name ~= 0
       record_Callback(handles.record, [], handles)
     elseif strcmpi(keyPressed,'s')
       clearROI_Callback(handles.clearROI, [], handles)
+    elseif strcmpi(keyPressed,'q')
+        setFrame(frame, handles);
     elseif strcmpi(keyPressed,'space')
         if advance == 0;
             advance = 1;
