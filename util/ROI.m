@@ -74,6 +74,7 @@ if strcmp(computer, 'PCWIN64')
     set(handles.savedata,'FontSize',10)
     set(handles.openhelp,'FontSize',10)
 end
+set(handles.asterisk,'FontSize',14);
 
 global detector, global frame, global folder_name, global data, global advance, global dragging, global orPos, global nudge, global coded;
 dragging = [];
@@ -172,6 +173,7 @@ if folder_name ~= 0
             end
     else
         csvwrite(file_path,data');
+        set(handles.asterisk, 'string','');
     end
 end
 ReleaseFocusFromUI(hObject);
@@ -209,6 +211,7 @@ global frame, global folder_name, global data, global advance, global dragging, 
         c = get(dragging,'Position');
         data(1:5 , frame) = [c(1) c(2)+c(4) c(1)+c(3) c(2) 1];
         dragging = [];
+        set (handles.asterisk, 'string','*');
     end
       
 function nudgeROI(xdiff, ydiff, handles)
@@ -219,6 +222,7 @@ if data(5,frame) == 1
     data(3,frame) = data(3,frame) + xdiff;
     data(4,frame) = data(4,frame) + ydiff;
     setFrame(frame, handles);
+    set (handles.asterisk, 'string','*');
 end
 
 function resizeROI(xsizediff, ysizediff, handles)
@@ -229,6 +233,7 @@ if data(5,frame) == 1
     data(3,frame) = data(3,frame) + xsizediff;
     data(4,frame) = data(4,frame) - ysizediff;
     setFrame(frame, handles);
+    set (handles.asterisk, 'string','*');
 end
     
 % --- Executes on button press in prev.
@@ -261,6 +266,9 @@ if folder_name ~= 0
 end
 if get(handles.autosave, 'Value') == 1
     csvwrite(file_path,data');
+    set(handles.asterisk, 'string','');
+else
+    set (handles.asterisk, 'string','*');
 end
     ReleaseFocusFromUI(hObject);
 
@@ -273,6 +281,9 @@ if folder_name ~= 0
 end
 if get(handles.autosave, 'Value') == 1
     csvwrite(file_path,data');
+    set(handles.asterisk, 'string','');
+else
+    set (handles.asterisk, 'string','*');
 end
 ReleaseFocusFromUI(hObject);
 
@@ -287,6 +298,9 @@ if folder_name ~= 0
 end
 if get(handles.autosave, 'Value') == 1
     csvwrite(file_path,data');
+    set(handles.asterisk, 'string','');
+else
+    set (handles.asterisk, 'string','*');
 end
     ReleaseFocusFromUI(hObject);
 
@@ -409,7 +423,7 @@ if folder_name ~= 0
 %     elseif strcmpi(keyPressed,'A')
 %         setFrame(frame-5, handles);
     elseif strcmpi(keyPressed,'space')
-        if advance == 0;
+        if advance == 0
             advance = 1;
             playMovie(handles);
         else
@@ -508,8 +522,8 @@ handles.progress=hObject; % tag for this axis, which I call axesX in this exampl
 axes(hObject); hist([]);
 guidata(hObject, handles); % update the handles structure for the gui
 % 
-% % --- Executes during object creation, after setting all properties.
-% function face_detection_CreateFcn(hObject, eventdata, handles)
-% 
-% function face_detection_Callback(hObject, eventdata, handles)
-% ReleaseFocusFromUI(hObject);
+% --- Executes during object creation, after setting all properties.
+function face_detection_CreateFcn(hObject, eventdata, handles)
+
+function face_detection_Callback(hObject, eventdata, handles)
+ReleaseFocusFromUI(hObject);
