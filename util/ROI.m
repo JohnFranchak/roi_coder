@@ -25,7 +25,7 @@ function varargout = ROI(varargin)
 % Last Modified by GUIDE v2.5 16-May-2018 12:35:41
 
 
-% Begin initialization code - DO NOT EDIT
+% Begin initialization code
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
@@ -74,7 +74,7 @@ if strcmp(computer, 'PCWIN64')
     set(handles.savedata,'FontSize',10)
     set(handles.openhelp,'FontSize',10)
 end
-set(handles.asterisk,'FontSize',14);
+set(handles.asterisk,'FontSize',18);
 
 global detector, global frame, global folder_name, global data, global advance, global dragging, global orPos, global nudge, global coded;
 dragging = [];
