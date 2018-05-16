@@ -1,9 +1,9 @@
 # Dynamic ROI Coder for Matlab
 
-github.com/JohnFranchak/roi_coding
-John Franchak (franchak@gmail.com)
-padlab.ucr.edu
-last updated 5-16-2018
+github.com/JohnFranchak/roi_coding  
+John Franchak (franchak@gmail.com)  
+padlab.ucr.edu  
+last updated 5-16-2018  
 
 ## Features
 User interface for annotating regions of interest (ROIs) on video frames for eye tracking or computer vision analysis. Included tool ('extract_frames.m') creates directory of video frames from quicktime-compatiable video files for coding. 
