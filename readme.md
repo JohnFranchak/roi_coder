@@ -1,11 +1,8 @@
 # Dynamic ROI Coder for Matlab
 
 github.com/JohnFranchak/roi_coding
-
 John Franchak (franchak@gmail.com)
-
 padlab.ucr.edu
-
 last updated 5-16-2018
 
 ## Features
@@ -38,7 +35,7 @@ Limitations
 
 Known issues
 - User interface may not display correctly on Windows
-- 
+- The application size is currently fixed and cannot be resized. This may make it not display correctly on smaller (e.g., laptop) screens.
 
 ## License/Legal
 
