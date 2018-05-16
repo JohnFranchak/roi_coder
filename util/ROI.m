@@ -507,9 +507,9 @@ function progress_CreateFcn(hObject, eventdata, handles)
 handles.progress=hObject; % tag for this axis, which I call axesX in this example
 axes(hObject); hist([]);
 guidata(hObject, handles); % update the handles structure for the gui
-
-% --- Executes during object creation, after setting all properties.
-function face_detection_CreateFcn(hObject, eventdata, handles)
-
-function face_detection_Callback(hObject, eventdata, handles)
-ReleaseFocusFromUI(hObject);
+% 
+% % --- Executes during object creation, after setting all properties.
+% function face_detection_CreateFcn(hObject, eventdata, handles)
+% 
+% function face_detection_Callback(hObject, eventdata, handles)
+% ReleaseFocusFromUI(hObject);
