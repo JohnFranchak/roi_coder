@@ -92,7 +92,11 @@ if folder_name ~= 0
     if isempty(filestruct)
         filestruct = dir(fullfile(folder_name, '*.jpg'));
     end
+    
+    mbox = msgbox('Please wait while images are sorted...');
     files = sort_nat({filestruct.name});
+    delete(mbox);
+    
     if ~isempty(files)
         frame = 1;
         coded = 1:length(files);
@@ -330,8 +334,6 @@ if get(handles.face_detection, 'Value') == 1
         end
     end
 end
-
-
 hold off
 drawnow update;
 
@@ -389,8 +391,10 @@ if folder_name ~= 0
       record_Callback(handles.record, [], handles)
     elseif strcmpi(keyPressed,'s')
       clearROI_Callback(handles.clearROI, [], handles)
-    elseif strcmpi(keyPressed,'q')
-        setFrame(frame, handles);
+%     elseif strcmpi(keyPressed,'D')
+%         setFrame(frame+5, handles);
+%     elseif strcmpi(keyPressed,'A')
+%         setFrame(frame-5, handles);
     elseif strcmpi(keyPressed,'space')
         if advance == 0;
             advance = 1;
