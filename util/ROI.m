@@ -87,9 +87,12 @@ global frame, global folder_name, global data, global advance, global dragging, 
 folder_name = uigetdir;
 
 if folder_name ~= 0
-    filestruct = dir(fullfile(folder_name, '*.JPG'));
-    files = sort_nat({filestruct.name});
     
+    filestruct = dir(fullfile(folder_name, '*.JPG'));
+    if isempty(filestruct)
+        filestruct = dir(fullfile(folder_name, '*.jpg'));
+    end
+    files = sort_nat({filestruct.name});
     if ~isempty(files)
         frame = 1;
         coded = 1:length(files);
