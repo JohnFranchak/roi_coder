@@ -63,6 +63,17 @@ guidata(hObject, handles);
 % UIWAIT makes ROI wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
+%Fix font sizes for windows 
+if strcmp(computer, 'PCWIN64');
+    set(handles.next,'FontSize',10)
+    set(handles.copy,'FontSize',10)
+    set(handles.prev,'FontSize',10)
+    set(handles.clearROI,'FontSize',10)
+    set(handles.record,'FontSize',10)
+    set(handles.loaddata,'FontSize',10)
+    set(handles.savedata,'FontSize',10)
+    set(handles.openhelp,'FontSize',10)
+end
 
 global detector, global frame, global folder_name, global data, global advance, global dragging, global orPos, global nudge, global coded;
 dragging = [];
