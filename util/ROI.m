@@ -64,7 +64,7 @@ guidata(hObject, handles);
 % uiwait(handles.figure1);
 
 %Fix font sizes for windows 
-if strcmp(computer, 'PCWIN64');
+if strcmp(computer, 'PCWIN64')
     set(handles.next,'FontSize',10)
     set(handles.copy,'FontSize',10)
     set(handles.prev,'FontSize',10)
@@ -79,7 +79,8 @@ global detector, global frame, global folder_name, global data, global advance, 
 dragging = [];
 folder_name = 0;
 nudge = 1;
-detector = vision.CascadeObjectDetector;
+
+%detector = vision.CascadeObjectDetector; %DEFUNCT FACE DETECTION IMPLEMENTATION
 
 % --- Outputs from this function are returned to the command line.
 function varargout = ROI_OutputFcn(hObject, eventdata, handles) 
@@ -314,7 +315,8 @@ hold off
 drawnow;
 
 function displayROI(handles)
-global image, global detector, global detected_roi, global frame, global folder_name, global data, global advance, global dragging, global orPos, global files;
+%global detector
+global image, global detected_roi, global frame, global folder_name, global data, global advance, global dragging, global orPos, global files;
 image = imread(get_file_name(),'JPG');
 axes(handles.ax1);
 imshow(image);
@@ -327,32 +329,32 @@ if data(5,frame) == 1
     set(a,'Parent',gca);
     set(a,'Position',[min(c(1),c(3)) min(c(2),c(4)) abs(c(1)-c(3)) abs(c(2)-c(4))]);
 end
-if get(handles.face_detection, 'Value') == 1
-    detected_roi = step(detector, image);
-    if ~isempty(detected_roi)
-        for i = 1:size(detected_roi,1)
-            if data(5, frame) == 1
-                if get(a, 'Position') ~= detected_roi(i,:)
-                    b(i) = annotation('Rectangle','ButtonDownFcn',@selectROI, 'Color','g','LineWidth',1);
-                    set(b(i),'Parent',gca);
-                    set(b(i),'Position',detected_roi(i,:));
-                end
-            else
-                b(i) = annotation('Rectangle','ButtonDownFcn',@selectROI, 'Color','g','LineWidth',1);
-                set(b(i),'Parent',gca);
-                set(b(i),'Position',detected_roi(i,:));
-            end
-        end
-    end
-end
+% if get(handles.face_detection, 'Value') == 1
+%     detected_roi = step(detector, image);
+%     if ~isempty(detected_roi)
+%         for i = 1:size(detected_roi,1)
+%             if data(5, frame) == 1
+%                 if get(a, 'Position') ~= detected_roi(i,:)
+%                     b(i) = annotation('Rectangle','ButtonDownFcn',@selectROI, 'Color','g','LineWidth',1);
+%                     set(b(i),'Parent',gca);
+%                     set(b(i),'Position',detected_roi(i,:));
+%                 end
+%             else
+%                 b(i) = annotation('Rectangle','ButtonDownFcn',@selectROI, 'Color','g','LineWidth',1);
+%                 set(b(i),'Parent',gca);
+%                 set(b(i),'Position',detected_roi(i,:));
+%             end
+%         end
+%     end
+% end
 hold off
 drawnow update;
 
-function selectROI(hObject,eventdata)
-global data, global frame, 
-c = get(hObject,'Position');
-set(hObject, 'Color', 'r');
-data(1:5 , frame) = [c(1) c(2)+c(4) c(1)+c(3) c(2) 1];
+% function selectROI(hObject,eventdata)
+% global data, global frame, 
+% c = get(hObject,'Position');
+% set(hObject, 'Color', 'r');
+% data(1:5 , frame) = [c(1) c(2)+c(4) c(1)+c(3) c(2) 1];
         
 function [x,y] = getPoints
 [x,y] = ginput(2);
@@ -497,6 +499,7 @@ drawnow;
 function openhelp_Callback(hObject, eventdata, handles)
 figure;
 imshow('splash.jpg'); 
+%web('https://github.com/JohnFranchak/roi_coding','-browser');
 ReleaseFocusFromUI(hObject);
 
 % --- Executes during object creation, after setting all properties.
