@@ -1,7 +1,11 @@
 # Dynamic ROI Coder for Matlab
+
 github.com/JohnFranchak/roi_coding
+
 John Franchak (franchak@gmail.com)
+
 padlab.ucr.edu
+
 last updated 5-16-2018
 
 ## Features
@@ -17,7 +21,7 @@ Current features:
 - Visualization of coded/uncoded regions
 
 ## Requirements
-Software is compatible with Matlab 2014a and greater on Windows and Mac (other versions/platforms may be compatible but have not been tested).
+Compatible with Matlab 2014a and greater on Windows and Mac (other versions/platforms may be compatible but have not been tested).
 
 ## Installation/Setup
 Unzip and copy the 'roi_coding' directory to your system.
@@ -31,6 +35,10 @@ Limitations
 - Must close the software and reopen to switch between ROIs
 - Only rectangular ROIs are supported
 - Out of image coordinates are possible if users drag ROI boxes off the edge of an image
+
+Known issues
+- User interface may not display correctly on Windows
+- 
 
 ## License/Legal
 
