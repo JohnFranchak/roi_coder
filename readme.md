@@ -16,7 +16,8 @@ Feature list:
 - Save/load multiple .csv files for different ROI coding sets
 - Autosave coding
 - Visualization of coded/uncoded regions  
-full user guide: https://github.com/JohnFranchak/roi_coder/wiki
+
+Full user guide: https://github.com/JohnFranchak/roi_coder/wiki
 
 ## Requirements
 ### Hardware/Software
