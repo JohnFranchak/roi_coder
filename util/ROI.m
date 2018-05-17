@@ -75,12 +75,12 @@ if strcmp(computer, 'PCWIN64')
     set(handles.openhelp,'FontSize',10)
     set(handles.autosave,'FontSize',10)
     set(handles.manual,'FontSize',10)
-    set(handles.text2,'FontSize',12)
-    set(handles.framenum,'FontSize',12)
-    set(handles.text9,'FontSize',12)
-    set(handles.stepsize,'FontSize',12)
-    set(handles.text4,'FontSize',12)
-    set(handles.filename,'FontSize',12)
+    set(handles.text2,'FontSize',11)
+    set(handles.framenum,'FontSize',11)
+    set(handles.text9,'FontSize',11)
+    set(handles.stepsize,'FontSize',11)
+    set(handles.text4,'FontSize',11)
+    set(handles.filename,'FontSize',11)
 end
 set(handles.asterisk,'FontSize',18);
 
