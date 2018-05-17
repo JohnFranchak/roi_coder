@@ -22,7 +22,7 @@ function varargout = ROI(varargin)
 
 % Edit the above text to modify the response to help ROI
 
-% Last Modified by GUIDE v2.5 16-May-2018 12:35:41
+% Last Modified by GUIDE v2.5 17-May-2018 09:29:42
 
 
 % Begin initialization code
@@ -511,7 +511,6 @@ drawnow;
 function openhelp_Callback(hObject, eventdata, handles)
 figure;
 imshow('splash.jpg'); 
-%web('https://github.com/JohnFranchak/roi_coding','-browser');
 ReleaseFocusFromUI(hObject);
 
 % --- Executes during object creation, after setting all properties.
@@ -525,3 +524,7 @@ function face_detection_CreateFcn(hObject, eventdata, handles)
 
 function face_detection_Callback(hObject, eventdata, handles)
 ReleaseFocusFromUI(hObject);
+
+% --- Executes on button press in manual.
+function manual_Callback(hObject, eventdata, handles)
+web('https://github.com/JohnFranchak/roi_coding/wiki','-browser');
