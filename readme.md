@@ -14,7 +14,7 @@ Feature list:
 - Click/drag to create rectangular ROIs on frames
 - Flexible keyboard controls for fine-tuning ROIs
 - Save/load multiple .csv files for different ROI coding sets
-- Autosave coding
+- Autosave
 - Visualization of coded/uncoded regions  
 
 Full user guide: https://github.com/JohnFranchak/roi_coder/wiki
@@ -34,8 +34,6 @@ The software reads a single directory of sequential .jpg files using one of the 
 
 If you have a video file that needs to be converted to frames, use the included `extract_frames.m` tool to create a compatible frame directory. 
 
-The software has only been tested for SD resolution frames (640x480 or 720x480). Higher-resolution images may not work correctly.
-
 ## Installation/Setup
 Unzip and copy the 'roi_coding' directory to your system.
 Open Matlab and navigate to the 'roi_coding' directory.
@@ -43,16 +41,12 @@ Run the coding software by entering the `ROICoder` command in the console.
 To shut down, simply close the figure (be sure to save data first).
 
 ## Limitations/Known Issues
-Limitations
 - Only one type of ROI can be coded/visualized at a time
 - Must close the software and reopen to switch between ROIs
 - Only rectangular ROIs are supported
 - Out of image coordinates are possible if users drag ROI boxes off the edge of an image
 - Only standard definition images have been tested
-
-Known issues
-- User interface may not display correctly on Windows
-- The application size is currently fixed and cannot be resized. This may make it not display correctly on smaller (e.g., laptop) screens.
+- The application size is currently fixed and cannot be resized.
 
 ## Attribution/Legal
 This software is open source. You are free to modify it to fit your needs and to use it for any purpose.   
@@ -75,7 +69,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see https://www.gnu.org/licenses/.
 
-### Licensing for software dependencies
+### License for third-party functions
 Natural sort function `sort_nat.m`
 Copyright (c) 2008, Douglas M. Schwarz 
 All rights reserved.
