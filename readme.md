@@ -1,6 +1,6 @@
 # Dynamic ROI Coder for Matlab
 
-github.com/JohnFranchak/roi_coding  
+www.github.com/JohnFranchak/roi_coding  
 John Franchak (franchak@gmail.com)  
 www.padlab.ucr.edu  
 last updated 5-16-2018
