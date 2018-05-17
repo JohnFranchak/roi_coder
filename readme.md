@@ -37,7 +37,7 @@ If you have a video file that needs to be converted to frames, use the included 
 ## Installation/Setup
 Unzip and copy the 'roi_coding' directory to your system.
 Open Matlab and navigate to the 'roi_coding' directory.
-Run the coding software by entering the `ROICoder` command in the console. 
+Run the coding software by entering the `roi_coder` command in the console. 
 To shut down, simply close the figure (be sure to save data first).
 
 ## Limitations/Known Issues
