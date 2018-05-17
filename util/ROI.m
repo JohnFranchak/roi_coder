@@ -510,7 +510,7 @@ drawnow;
 % --- Executes on button press in openhelp.
 function openhelp_Callback(hObject, eventdata, handles)
 figure;
-imshow('splash.jpg'); 
+imshow('roi_shortcuts.jpg'); 
 ReleaseFocusFromUI(hObject);
 
 % --- Executes during object creation, after setting all properties.
