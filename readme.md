@@ -15,7 +15,7 @@ Feature list:
 - Flexible keyboard controls for fine-tuning ROIs
 - Save/load multiple .csv files for different ROI coding sets
 - Autosave coding
-- Visualization of coded/uncoded regions
+- Visualization of coded/uncoded regions  
 full user guide: https://github.com/JohnFranchak/roi_coder/wiki
 
 ## Requirements
