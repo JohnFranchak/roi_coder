@@ -26,9 +26,9 @@ The software reads a single directory of sequential .jpg files using one of the 
 
 |Format 1|Format 2|Example|  
 |---  |---  |--- |    
-|1.jpg|\*\_1.jpg|subj1\_.jpg|  
-|1.jpg|\*\_1.jpg|subj1\_.jpg|  
-|1.jpg|\*\_1.jpg|subj1\_.jpg|  
+|1.jpg|\*\_1.jpg|subj1\_1.jpg|  
+|2.jpg|\*\_2.jpg|subj1\_2.jpg|  
+|3.jpg|\*\_3.jpg|subj1\_3.jpg|  
 
 If you have a video file that needs to be converted to frames, use the included `extract_frames.m` tool to create a compatible frame directory. 
 
