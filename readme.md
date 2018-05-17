@@ -2,7 +2,7 @@
 
 github.com/JohnFranchak/roi_coding  
 John Franchak (franchak@gmail.com)  
-padlab.ucr.edu  
+www.padlab.ucr.edu  
 last updated 5-16-2018  
 
 ## Features
