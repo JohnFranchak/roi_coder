@@ -23,9 +23,13 @@ Compatible with Matlab 2014a and greater on Windows and Mac (other versions/plat
 
 ### Video/Image Files
 The software reads a single directory of sequential .jpg files using one of the following naming schemes:
-`1.jpg OR ***_1.jpg  
-2.jpg OR ***_2.jpg  
-3.jpg OR ***_3.jpg`  
+
+|Format 1|Format 2|Example|  
+|---  |---  |--- |    
+|1.jpg|\*\_1.jpg|subj1\_.jpg|  
+|1.jpg|\*\_1.jpg|subj1\_.jpg|  
+|1.jpg|\*\_1.jpg|subj1\_.jpg|  
+
 If you have a video file that needs to be converted to frames, use the included `extract_frames.m` tool to create a compatible frame directory. 
 
 The software has only been tested for SD resolution frames (640x480 or 720x480). Higher-resolution images may not work correctly.
