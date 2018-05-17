@@ -73,6 +73,14 @@ if strcmp(computer, 'PCWIN64')
     set(handles.loaddata,'FontSize',10)
     set(handles.savedata,'FontSize',10)
     set(handles.openhelp,'FontSize',10)
+    set(handles.autosave,'FontSize',10)
+    set(handles.manual,'FontSize',10)
+    set(handles.text2,'FontSize',11)
+    set(handles.framenum,'FontSize',11)
+    set(handles.text9,'FontSize',11)
+    set(handles.stepsize,'FontSize',11)
+    set(handles.text4,'FontSize',11)
+    set(handles.filename,'FontSize',11)
 end
 set(handles.asterisk,'FontSize',18);
 
@@ -484,7 +492,7 @@ function ReleaseFocusFromUI(uiObj)
 
 % --- Executes during object creation, after setting all properties.
 function ax1_CreateFcn(hObject, eventdata, handles)
-imshow('splash.jpg'); % initial image I want to display
+%imshow('splash.jpg'); % initial image I want to display
 handles.ax1=hObject; % tag for this axis, which I call axesX in this example
 guidata(hObject, handles); % update the handles structure for the gui
 %set(hObject, 'Units','Pixel')
